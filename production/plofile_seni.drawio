@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="0TfHyEb_RxeBv3fJQ6QV" name="ページ1">
-        <mxGraphModel dx="901" dy="1768" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+        <mxGraphModel dx="764" dy="1834" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -156,7 +156,7 @@
                         <mxPoint x="720" y="290" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="48" value="Main(servlet)&lt;div&gt;doPost()&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                <mxCell id="48" value="Login(servlet)&lt;div&gt;doPost()&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
                     <mxGeometry x="500" y="200" width="120" height="40" as="geometry"/>
                 </mxCell>
                 <mxCell id="51" value="userId&lt;div&gt;pass&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
