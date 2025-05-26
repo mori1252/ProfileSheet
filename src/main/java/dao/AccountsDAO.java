@@ -1,3 +1,5 @@
+// dao/AccountsDAO.java
+
 package dao;
 
 import java.sql.Connection;
@@ -12,145 +14,49 @@ import model.Account;
 import model.Login;
 
 public class AccountsDAO {
-    private final String JDBC_URL = "jdbc:h2:C:/Users/1Java23/Desktop/work/ProfileSheet/database/Users";
+    private final String JDBC_URL = "jdbc:h2:file:C:/Users/1Java23/Desktop/work/ProfileSheet/database/Users";
     private final String DB_USER  = "sa";
     private final String DB_PASS  = "";
 
-    // ── 1. 全ユーザー取得 ───────────────────────────────
-    public List<Account> findAllUsers() {
+    // ドライバロード
+    private void loadDriver() {
         try {
             Class.forName("org.h2.Driver");
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            throw new IllegalStateException("JDBCドライバが見つかりません", e);
         }
-
-        List<Account> list = new ArrayList<>();
-        String sql = "SELECT ID, NAME FROM USERS";
-
-        try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
-             PreparedStatement pStmt = conn.prepareStatement(sql);
-             ResultSet rs = pStmt.executeQuery()) {
-
-            while (rs.next()) {
-                int id   = rs.getInt("ID");
-                String name = rs.getString("NAME");
-                list.add(new Account(id, name, null, null, null, null, null, null, null, null));
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return list;
     }
 
-    // ── 2. ログイン認証用にID＋パスワードで取得 ────────────────────
-    public Account findByLogin(Login login) {
-        Account account = null;
-        try {
-            Class.forName("org.h2.Driver");
-        } catch (ClassNotFoundException e) {
-            throw new IllegalStateException("JDBCドライバを読み込めませんでした");
-        }
-
-        String sql = "SELECT ID, NAME, PASS, BIRTH, ADDRESS, CONTACT, DISABILITY, MEDICAL, SKILL, TARGETJOB "
-                   + "FROM USERS WHERE ID = ? AND PASS = ?";
-
-        try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
-             PreparedStatement pStmt = conn.prepareStatement(sql)) {
-
-            pStmt.setInt(1,  login.getId());
-            pStmt.setString(2,  login.getPass());
-
-            try (ResultSet rs = pStmt.executeQuery()) {
-                if (rs.next()) {
-                    int id          = rs.getInt("ID");
-                    String name     = rs.getString("NAME");
-                    String pass     = rs.getString("PASS");
-                    String birth    = rs.getString("BIRTH");
-                    String address  = rs.getString("ADDRESS");
-                    String contact  = rs.getString("CONTACT");
-                    String disability = rs.getString("DISABILITY");
-                    String medical  = rs.getString("MEDICAL");
-                    String skill    = rs.getString("SKILL");
-                    String targetJob = rs.getString("TARGETJOB");
-
-                    account = new Account(
-                        id, name, pass, birth, address, contact,
-                        disability, medical, skill, targetJob
-                    );
-                }
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return account;
+    // ResultSet → Account マッピング
+    private Account mapRow(ResultSet rs) throws SQLException {
+        return new Account(
+            rs.getInt("ID"),
+            rs.getString("NAME"),
+            rs.getString("PASS"),
+            rs.getString("BIRTH"),
+            rs.getString("ADDRESS"),
+            rs.getString("CONTACT"),
+            rs.getString("EDUCATION"),
+            rs.getString("WORK_HISTORY"),
+            rs.getString("TARGETJOB"),
+            rs.getString("CERTIFICATIONS"),
+            rs.getString("SELF_PR"),
+            rs.getString("HOBBIES"),
+            rs.getString("DISABILITY"),
+            rs.getString("MEDICAL"),
+            rs.getString("PHOTO")
+        );
     }
 
-    // ── 3. IDで取得 ───────────────────────────────────
-    public Account findById(int id) {
-        Account account = null;
-        String sql = "SELECT * FROM USERS WHERE ID = ?";
-
-        try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
-             PreparedStatement pStmt = conn.prepareStatement(sql)) {
-
-            pStmt.setInt(1, id);
-            try (ResultSet rs = pStmt.executeQuery()) {
-                if (rs.next()) {
-                    String name     = rs.getString("NAME");
-                    String pass     = rs.getString("PASS");
-                    String birth    = rs.getString("BIRTH");
-                    String address  = rs.getString("ADDRESS");
-                    String contact  = rs.getString("CONTACT");
-                    String disability = rs.getString("DISABILITY");
-                    String medical  = rs.getString("MEDICAL");
-                    String skill    = rs.getString("SKILL");
-                    String targetJob = rs.getString("TARGETJOB");
-
-                    account = new Account(
-                        id, name, pass, birth, address, contact,
-                        disability, medical, skill, targetJob
-                    );
-                }
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return account;
-    }
-
-    // ── 4. ID 存在チェック ───────────────────────────────
-    public boolean exists(int id) {
-        String sql = "SELECT COUNT(*) FROM USERS WHERE ID = ?";
-
-        try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ps.setInt(1, id);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getInt(1) > 0;
-                }
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return false;
-    }
-
-    // ── 5. 新規登録 ──────────────────────────────────
+    // 新規登録
     public void save(Account account) {
+        loadDriver();
         String sql = "INSERT INTO USERS "
-                   + "(ID, NAME, PASS, BIRTH, ADDRESS, CONTACT, DISABILITY, MEDICAL, SKILL, TARGETJOB) "
-                   + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
+                   + "(ID, NAME, PASS, BIRTH, ADDRESS, CONTACT,"
+                   + " EDUCATION, WORK_HISTORY, TARGETJOB,"
+                   + " CERTIFICATIONS, SELF_PR, HOBBIES,"
+                   + " DISABILITY, MEDICAL, PHOTO) "
+                   + "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -160,10 +66,15 @@ public class AccountsDAO {
             ps.setString(4, account.getBirth());
             ps.setString(5, account.getAddress());
             ps.setString(6, account.getContact());
-            ps.setString(7, account.getDisability());
-            ps.setString(8, account.getMedical());
-            ps.setString(9, account.getSkill());
-            ps.setString(10, account.getTargetJob());
+            ps.setString(7, account.getEducation());
+            ps.setString(8, account.getWorkHistory());
+            ps.setString(9, account.getTargetJob());
+            ps.setString(10, account.getCertifications());
+            ps.setString(11, account.getSelfPR());
+            ps.setString(12, account.getHobbies());
+            ps.setString(13, account.getDisability());
+            ps.setString(14, account.getMedical());
+            ps.setString(15, account.getPhotoBase64());
 
             ps.executeUpdate();
         } catch (SQLException e) {
@@ -171,13 +82,15 @@ public class AccountsDAO {
         }
     }
 
-    // ── 6. 更新 ────────────────────────────────────
+    // 更新
     public void update(Account account) {
+        loadDriver();
         String sql = "UPDATE USERS SET "
-                   + "NAME=?, PASS=?, BIRTH=?, ADDRESS=?, CONTACT=?, "
-                   + "DISABILITY=?, MEDICAL=?, SKILL=?, TARGETJOB=? "
-                   + "WHERE ID = ?";
-
+                   + "NAME=?, PASS=?, BIRTH=?, ADDRESS=?, CONTACT=?,"
+                   + " EDUCATION=?, WORK_HISTORY=?, TARGETJOB=?,"
+                   + " CERTIFICATIONS=?, SELF_PR=?, HOBBIES=?,"
+                   + " DISABILITY=?, MEDICAL=?, PHOTO=? "
+                   + "WHERE ID=?";
         try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -186,15 +99,100 @@ public class AccountsDAO {
             ps.setString(3, account.getBirth());
             ps.setString(4, account.getAddress());
             ps.setString(5, account.getContact());
-            ps.setString(6, account.getDisability());
-            ps.setString(7, account.getMedical());
-            ps.setString(8, account.getSkill());
-            ps.setString(9, account.getTargetJob());
-            ps.setInt(10, account.getId());
+            ps.setString(6, account.getEducation());
+            ps.setString(7, account.getWorkHistory());
+            ps.setString(8, account.getTargetJob());
+            ps.setString(9, account.getCertifications());
+            ps.setString(10, account.getSelfPR());
+            ps.setString(11, account.getHobbies());
+            ps.setString(12, account.getDisability());
+            ps.setString(13, account.getMedical());
+            ps.setString(14, account.getPhotoBase64());
+            ps.setInt(15, account.getId());
 
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    // IDで取得
+    public Account findById(int id) {
+        loadDriver();
+        String sql = "SELECT * FROM USERS WHERE ID=?";
+        try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return mapRow(rs);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    // ログイン認証
+    public Account findByLogin(Login login) {
+        loadDriver();
+        String sql = "SELECT * FROM USERS WHERE ID=? AND PASS=?";
+        try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, login.getId());
+            ps.setString(2, login.getPass());
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                	System.out.println("認証成功");
+                    return mapRow(rs);
+                } else {
+                	System.out.println("認証失敗");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    // 全ユーザー取得
+    public List<Account> findAllUsers() {
+        loadDriver();
+        List<Account> list = new ArrayList<>();
+        String sql = "SELECT ID, NAME, PHOTO FROM USERS";
+        try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Account a = new Account();
+                a.setId(rs.getInt("ID"));
+                a.setName(rs.getString("NAME"));
+                a.setPhotoBase64(rs.getString("PHOTO"));
+                list.add(a);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+    /**
+     * 指定IDのユーザーが存在するかチェックする
+     */
+    public boolean exists(int id) {
+        loadDriver();
+        String sql = "SELECT COUNT(*) FROM USERS WHERE ID = ?";
+        try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

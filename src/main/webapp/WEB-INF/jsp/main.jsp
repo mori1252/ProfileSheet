@@ -3,27 +3,29 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>プロフィールシート</title>
+  <meta charset="UTF-8">
+  <title>利用者一覧</title>
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 <body>
+  <h2>利用者一覧</h2>
 
-<h2>利用者一覧</h2>
+  <c:if test="${empty userList}">
+    <p>利用者情報がありません。</p>
+  </c:if>
 
-<!--<c:if test="${empty userList}">-->
-<!--<p>利用者情報がありません。</p>-->
-<!--</c:if>-->
-<ul>
-<c:forEach var="user" items="${userList}">
-<li>
-<a href="<c:url value='/Profile?id=${user.id}'/>">
-<c:out value="${user.name}" />
-</a>
-</li>
-</c:forEach>
-</ul>
+  <c:if test="${not empty userList}">
+    <ul>
+      <c:forEach var="user" items="${userList}">
+        <li>
+          <a href="<c:url value='/Profile?id=${user.id}'/>">
+            <c:out value="${user.name}" />
+          </a>
+        </li>
+      </c:forEach>
+    </ul>
+  </c:if>
 
-<p><a href="<c:url value='/LogoutServlet'/>">ログアウト</a></p>
-
+  <p><a href="<c:url value='/LogoutServlet'/>">ログアウト</a></p>
 </body>
 </html>
