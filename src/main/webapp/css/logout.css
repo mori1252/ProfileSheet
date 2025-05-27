@@ -1,0 +1,37 @@
+/* logout.css（ログアウト画面用シンプルデザイン） */
+
+body {
+  background: #f7f6f3;
+  font-family: 'Segoe UI', 'Meiryo', sans-serif;
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+p {
+  color: #333;
+  font-size: 1.3rem;
+  margin-bottom: 2rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+a {
+  display: inline-block;
+  background: #f39200;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  border-radius: 6px;
+  padding: 12px 32px;
+  font-size: 1.1rem;
+  transition: background 0.2s;
+  box-shadow: 0 2px 6px rgba(243,146,0,0.08);
+  letter-spacing: 0.05em;
+}
+a:hover {
+  background: #d67700;
+}

@@ -6,6 +6,7 @@
   <meta charset="UTF-8">
   <title>利用者一覧</title>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/css/main.css">
 </head>
 <body>
   <h2>利用者一覧</h2>

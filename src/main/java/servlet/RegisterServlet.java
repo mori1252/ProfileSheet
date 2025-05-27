@@ -2,6 +2,7 @@ package servlet;
 
 import java.io.IOException;
 
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -19,7 +20,7 @@ public class RegisterServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // 登録フォーム表示
+        // GET リクエスト時は新規登録フォーム（register.jsp）を表示
         request.getRequestDispatcher("/WEB-INF/jsp/register.jsp")
                .forward(request, response);
     }
@@ -29,33 +30,45 @@ public class RegisterServlet extends HttpServlet {
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
 
-        // パラメータ取得
-        int id = Integer.parseInt(request.getParameter("id"));
+        // パラメータ取得: ID とパスワードは不要
         String name = request.getParameter("name");
-        String pass = request.getParameter("pass");
+        String birth = request.getParameter("birth");
+        String address = request.getParameter("address");
+        String contact = request.getParameter("contact");
+        String education = request.getParameter("education");
+        String workHistory = request.getParameter("workHistory");
+        String targetJob = request.getParameter("targetJob");
+        String certifications = request.getParameter("certifications");
+        String selfPR = request.getParameter("selfPR");
+        String hobbies = request.getParameter("hobbies");
+        String disability = request.getParameter("disability");
+        String medical = request.getParameter("medical");
+        String photoBase64 = ""; // 今は空文字固定
 
-        // Account オブジェクト生成（他フィールドは空文字で初期化）
+        // Account オブジェクトにセット（IDはDAO側で自動採番）
         Account account = new Account();
-        account.setId(id);
         account.setName(name);
-        account.setPass(pass);
-        account.setBirth("");
-        account.setAddress("");
-        account.setContact("");
-        account.setEducation("");
-        account.setWorkHistory("");
-        account.setTargetJob("");
-        account.setCertifications("");
-        account.setSelfPR("");
-        account.setHobbies("");
-        account.setDisability("");
-        account.setMedical("");
-        account.setPhotoBase64("");
+        account.setPass("");            // パスワード不要なら空文字
+        account.setBirth(birth);
+        account.setAddress(address);
+        account.setContact(contact);
+        account.setEducation(education);
+        account.setWorkHistory(workHistory);
+        account.setTargetJob(targetJob);
+        account.setCertifications(certifications);
+        account.setSelfPR(selfPR);
+        account.setHobbies(hobbies);
+        account.setDisability(disability);
+        account.setMedical(medical);
+        account.setPhotoBase64(photoBase64);
 
-        // 登録
+        // 登録／更新
         dao.save(account);
-
-        // 登録完了後にログイン画面へリダイレクト
+        // 登録処理後
+        request.setAttribute("registerSuccess", true);
+        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/jsp/register.jsp");
+        rd.forward(request, response);
+        // 登録完了後、一覧画面へリダイレクト
         response.sendRedirect(request.getContextPath() + "/LoginServlet");
     }
 }

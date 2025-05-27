@@ -59,7 +59,7 @@ public class ProfileServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
-
+        
         // --- 1) セッションから ID 取得 ---
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("profileId") == null) {
@@ -85,7 +85,14 @@ public class ProfileServlet extends HttpServlet {
         account.setHobbies(request.getParameter("hobbies"));
         account.setDisability(request.getParameter("disability"));
         account.setMedical(request.getParameter("medical"));
-        account.setPhotoBase64(request.getParameter("photoBase64"));
+        String photoBase64 = request.getParameter("photoBase64");
+        if (photoBase64 == null || photoBase64.isEmpty()) {
+            Account old = dao.findById(id);
+            if (old != null) {
+                photoBase64 = old.getPhotoBase64();
+            }
+        }
+        account.setPhotoBase64(photoBase64);
 
         // --- 3) INSERT or UPDATE ---
         if (dao.exists(id)) {

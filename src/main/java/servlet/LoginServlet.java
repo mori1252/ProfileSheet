@@ -3,6 +3,7 @@ package servlet;
 import java.io.IOException;
 import java.util.List;
 
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -22,12 +23,24 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // ログイン画面を表示
-        request.getRequestDispatcher("/WEB-INF/jsp/login.jsp")
-               .forward(request, response);
+    	HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("loginUser") == null) {
+            // 未ログインならログイン画面へ
+        	RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/jsp/login.jsp");
+        	rd.forward(request, response);
+
+            return;
+        }
+        
+        //  userList を再取得する
+        AccountsDAO dao = new AccountsDAO();
+        List<Account> userList = dao.findAllUsers();
+        request.setAttribute("userList", userList);
+        // ログイン済みならmain.jspにフォワード
+        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/jsp/main.jsp");
+        rd.forward(request, response);
     }
 
-    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 

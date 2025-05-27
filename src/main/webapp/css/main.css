@@ -1,0 +1,91 @@
+/* userlist.css（利用者一覧ページ用） */
+
+/* ページ全体の背景と中央寄せ */
+body {
+  background: #f7f6f3;
+  font-family: 'Segoe UI', 'Meiryo', sans-serif;
+  margin: 0;
+}
+
+/* 見出し */
+h2 {
+  text-align: center;
+  color: #f39200;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-top: 2.5rem;
+  margin-bottom: 2rem;
+  letter-spacing: 0.05em;
+  text-shadow: 1px 1px 2px rgba(243,146,0,0.08);
+}
+
+/* 利用者リスト全体を中央寄せ */
+ul {
+  max-width: 400px;
+  margin: 0 auto 2.5rem auto;
+  padding: 0;
+  list-style: none;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  border: 1px solid #e0c9a6;
+}
+
+/* 利用者リストの各項目 */
+ul li {
+  border-bottom: 1px solid #f3e6d6;
+  padding: 1.2rem 1.5rem;
+  text-align: left;
+  font-size: 1.1rem;
+  transition: background 0.15s;
+}
+
+ul li:last-child {
+  border-bottom: none;
+}
+
+/* 利用者名リンク */
+ul li a {
+  color: #333;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s;
+  padding: 0.2em 0.4em;
+  border-radius: 4px;
+}
+
+ul li a:hover {
+  color: #fff;
+  background: #f39200;
+}
+
+/* 「利用者情報がありません」メッセージ */
+p {
+  text-align: center;
+  color: #888;
+  font-size: 1.1rem;
+  margin-top: 2rem;
+}
+
+/* ログアウトリンク */
+body > p:last-child {
+  text-align: center;
+  margin-top: 2.5rem;
+}
+
+body > p:last-child a {
+  display: inline-block;
+  background: #f39200;
+  color: #fff;
+  padding: 10px 28px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background 0.2s;
+  box-shadow: 0 2px 6px rgba(243,146,0,0.08);
+  letter-spacing: 0.05em;
+}
+
+body > p:last-child a:hover {
+  background: #d67700;
+}

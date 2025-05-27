@@ -7,6 +7,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,7 +64,14 @@ public class AccountsDAO {
             ps.setInt(1, account.getId());
             ps.setString(2, account.getName());
             ps.setString(3, account.getPass());
-            ps.setString(4, account.getBirth());
+
+            // ← 空文字または null のときは DATE カラムに null を入れる
+            if (account.getBirth() == null || account.getBirth().isEmpty()) {
+                ps.setNull(4, Types.DATE);
+            } else {
+                ps.setDate(4, java.sql.Date.valueOf(account.getBirth()));
+            }
+
             ps.setString(5, account.getAddress());
             ps.setString(6, account.getContact());
             ps.setString(7, account.getEducation());
@@ -96,7 +104,14 @@ public class AccountsDAO {
 
             ps.setString(1, account.getName());
             ps.setString(2, account.getPass());
-            ps.setString(3, account.getBirth());
+
+            // ← 空文字または null のときは DATE カラムに null を入れる
+            if (account.getBirth() == null || account.getBirth().isEmpty()) {
+                ps.setNull(3, Types.DATE);
+            } else {
+                ps.setDate(3, java.sql.Date.valueOf(account.getBirth()));
+            }
+
             ps.setString(4, account.getAddress());
             ps.setString(5, account.getContact());
             ps.setString(6, account.getEducation());
@@ -115,6 +130,7 @@ public class AccountsDAO {
             e.printStackTrace();
         }
     }
+
 
     // IDで取得
     public Account findById(int id) {
