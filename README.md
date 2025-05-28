@@ -1,12 +1,13 @@
-# Name（リポジトリ/プロジェクト/OSSなどの名前）
+# Name
 
-profile
+ProfileSheet
 
 # DEMO
 
 本アプリは、利用者のプロフィール情報をWeb上で管理・閲覧できるシステムです。  
 下記は利用者一覧・プロフィール詳細画面のイメージです。
 ![スクリーンショット](production/list_ss.png)
+
 ![スクリーンショット](production/profile_ss.png)
 
 # Features
@@ -29,11 +30,9 @@ profile
 
 # Installation
 
-Requirementで列挙したライブラリなどのインストール方法を説明する
-
 1. このリポジトリをクローン
     ```bash
-    git clone https://github.com/mori1252/profile.git
+    git clone https://github.com/mori1252/ProfileSheet.git
     ```
 2. Eclipseでプロジェクトをインポート
 3. 必要なライブラリ（H2, JSTLなど）をビルドパスに追加
