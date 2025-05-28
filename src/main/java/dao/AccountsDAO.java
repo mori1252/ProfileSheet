@@ -1,5 +1,3 @@
-// dao/AccountsDAO.java
-
 package dao;
 
 import java.sql.Connection;
@@ -15,6 +13,7 @@ import model.Account;
 import model.Login;
 
 public class AccountsDAO {
+
     private final String JDBC_URL = "jdbc:h2:file:C:/Users/1Java23/Desktop/work/ProfileSheet/database/Users";
     private final String DB_USER  = "sa";
     private final String DB_PASS  = "";
@@ -26,6 +25,12 @@ public class AccountsDAO {
         } catch (ClassNotFoundException e) {
             throw new IllegalStateException("JDBCドライバが見つかりません", e);
         }
+    }
+
+    // ★共通コネクション取得メソッド
+    private Connection getConnection() throws SQLException {
+        loadDriver();
+        return DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
     }
 
     // ResultSet → Account マッピング
@@ -51,14 +56,13 @@ public class AccountsDAO {
 
     // 新規登録
     public void save(Account account) {
-        loadDriver();
         String sql = "INSERT INTO USERS "
                    + "(ID, NAME, PASS, BIRTH, ADDRESS, CONTACT,"
                    + " EDUCATION, WORK_HISTORY, TARGETJOB,"
                    + " CERTIFICATIONS, SELF_PR, HOBBIES,"
                    + " DISABILITY, MEDICAL, PHOTO) "
                    + "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-        try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
+        try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setInt(1, account.getId());
@@ -92,14 +96,13 @@ public class AccountsDAO {
 
     // 更新
     public void update(Account account) {
-        loadDriver();
         String sql = "UPDATE USERS SET "
                    + "NAME=?, PASS=?, BIRTH=?, ADDRESS=?, CONTACT=?,"
                    + " EDUCATION=?, WORK_HISTORY=?, TARGETJOB=?,"
                    + " CERTIFICATIONS=?, SELF_PR=?, HOBBIES=?,"
                    + " DISABILITY=?, MEDICAL=?, PHOTO=? "
                    + "WHERE ID=?";
-        try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
+        try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, account.getName());
@@ -131,12 +134,10 @@ public class AccountsDAO {
         }
     }
 
-
     // IDで取得
     public Account findById(int id) {
-        loadDriver();
         String sql = "SELECT * FROM USERS WHERE ID=?";
-        try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
+        try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
@@ -152,18 +153,17 @@ public class AccountsDAO {
 
     // ログイン認証
     public Account findByLogin(Login login) {
-        loadDriver();
         String sql = "SELECT * FROM USERS WHERE ID=? AND PASS=?";
-        try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
+        try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, login.getId());
             ps.setString(2, login.getPass());
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                	System.out.println("認証成功");
+                    System.out.println("認証成功");
                     return mapRow(rs);
                 } else {
-                	System.out.println("認証失敗");
+                    System.out.println("認証失敗");
                 }
             }
         } catch (SQLException e) {
@@ -174,10 +174,9 @@ public class AccountsDAO {
 
     // 全ユーザー取得
     public List<Account> findAllUsers() {
-        loadDriver();
         List<Account> list = new ArrayList<>();
         String sql = "SELECT ID, NAME, PHOTO FROM USERS";
-        try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
+        try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
@@ -192,13 +191,11 @@ public class AccountsDAO {
         }
         return list;
     }
-    /**
-     * 指定IDのユーザーが存在するかチェックする
-     */
+
+     //指定IDのユーザーが存在するかチェックする
     public boolean exists(int id) {
-        loadDriver();
         String sql = "SELECT COUNT(*) FROM USERS WHERE ID = ?";
-        try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
+        try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
@@ -210,5 +207,17 @@ public class AccountsDAO {
             e.printStackTrace();
         }
         return false;
+    }
+
+    // 削除メソッド
+    public void deleteUserById(String id) {
+        String sql = "DELETE FROM USERS WHERE ID = ?";
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, id);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -1,1 +1,61 @@
-# profile
+# Name（リポジトリ/プロジェクト/OSSなどの名前）
+
+profile
+
+# DEMO
+
+本アプリは、利用者のプロフィール情報をWeb上で管理・閲覧できるシステムです。  
+下記は利用者一覧・プロフィール詳細画面のイメージです。
+![スクリーンショット](production/list_ss.png)
+![スクリーンショット](production/profile_ss.png)
+
+# Features
+
+- 利用者のプロフィール（氏名・住所・連絡先・学歴・職歴など）を一元管理
+- 画像（顔写真）アップロード・プレビュー機能
+- 利用者情報の新規登録・編集・削除
+- ログイン認証機能
+- シンプルで見やすいUI（ジョブリッジ風デザイン）
+
+# Requirement
+
+本アプリを動かすために必要な環境・ライブラリ
+
+* Java 21 以上
+* Eclipse 2024 以降
+* Apache Tomcat 10 以降
+* H2 Database 2.x
+* JSTL 1.2
+
+# Installation
+
+Requirementで列挙したライブラリなどのインストール方法を説明する
+
+1. このリポジトリをクローン
+    ```bash
+    git clone https://github.com/mori1252/profile.git
+    ```
+2. Eclipseでプロジェクトをインポート
+3. 必要なライブラリ（H2, JSTLなど）をビルドパスに追加
+4. Tomcatサーバーにデプロイ
+
+# Usage
+
+1. Tomcatサーバーを起動
+2. ブラウザで `http://localhost:8080/profile/` にアクセス
+3. ログイン後、利用者一覧やプロフィール編集などの機能を利用
+
+# Note
+
+注意点などがあれば書く
+
+# Author
+
+* 作成者: mori1252
+
+# License
+profile is under [MIT license](https://opensource.org/licenses/MIT).
+
+「社外秘」
+
+profile is Confidential.

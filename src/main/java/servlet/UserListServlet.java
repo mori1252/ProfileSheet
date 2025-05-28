@@ -13,7 +13,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import dao.AccountsDAO;
 import model.Account;
 
-@WebServlet("/UserList")
+@WebServlet("/UserListServlet")
 public class UserListServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
