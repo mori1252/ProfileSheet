@@ -5,7 +5,7 @@ package model;
 public class Account {
     private int id;
     private String name;
-    private String pass;
+//    private String pass;
     private String birth;
     private String address;
     private String contact;
@@ -22,34 +22,34 @@ public class Account {
     public Account() {}
 
     // フルコンストラクタ
-    public Account(int id, String name, String pass, String birth,
+    public Account(int id, String name, String birth,
                    String address, String contact,
                    String education, String workHistory,
                    String targetJob, String certifications,
                    String selfPR, String hobbies,
                    String disability, String medical,
                    String photoBase64) {
-        this.id              = id;
-        this.name            = name;
-        this.pass            = pass;
-        this.birth           = birth;
-        this.address         = address;
-        this.contact         = contact;
-        this.education       = education;
-        this.workHistory     = workHistory;
-        this.targetJob       = targetJob;
-        this.certifications  = certifications;
-        this.selfPR          = selfPR;
-        this.hobbies         = hobbies;
-        this.disability      = disability;
-        this.medical         = medical;
-        this.photoBase64     = photoBase64;
+        this.id = id;
+        this.name = name;
+//        this.pass = pass;
+        this.birth = birth;
+        this.address = address;
+        this.contact = contact;
+        this.education = education;
+        this.workHistory = workHistory;
+        this.targetJob = targetJob;
+        this.certifications = certifications;
+        this.selfPR = selfPR;
+        this.hobbies = hobbies;
+        this.disability = disability;
+        this.medical = medical;
+        this.photoBase64 = photoBase64;
     }
 
     // ──── ゲッター ────
     public int    getId()             { return id; }
     public String getName()           { return name; }
-    public String getPass()           { return pass; }
+//    public String getPass()           { return pass; }
     public String getBirth()          { return birth; }
     public String getAddress()        { return address; }
     public String getContact()        { return contact; }
@@ -66,7 +66,7 @@ public class Account {
     // ──── セッター ────
     public void setId(int id)                         { this.id = id; }
     public void setName(String name)                  { this.name = name; }
-    public void setPass(String pass)                  { this.pass = pass; }
+//    public void setPass(String pass)                  { this.pass = pass; }
     public void setBirth(String birth)                { this.birth = birth; }
     public void setAddress(String address)            { this.address = address; }
     public void setContact(String contact)            { this.contact = contact; }

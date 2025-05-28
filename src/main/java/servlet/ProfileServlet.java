@@ -73,7 +73,7 @@ public class ProfileServlet extends HttpServlet {
         account.setId(id);
         account.setName(request.getParameter("name"));
         // パスワードは画面に出していない場合は削除、または必要ならフォームに追加してください
-        account.setPass(request.getParameter("pass"));
+//        account.setPass(request.getParameter("pass"));
         account.setBirth(request.getParameter("birth"));
         account.setAddress(request.getParameter("address"));
         account.setContact(request.getParameter("contact"));

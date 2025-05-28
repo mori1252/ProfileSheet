@@ -15,20 +15,23 @@
       <div class="resume-card">
         <div class="resume-header">
           <!-- 写真アップロードエリア -->
-          <div class="photo" id="drop-area">
-            <input type="file" id="photoInput" accept="image/*" style="display:none;" />
-            <img id="photoPreview"
-                 src="<c:choose>
-                        <c:when test='${not empty account.photoBase64}'>
-                          ${account.photoBase64}
-                        </c:when>
-                        <c:otherwise>
-                          ${ctx}/images/placeholder.png
-                        </c:otherwise>
-                      </c:choose>"
-                 alt="プロフィール写真" />
-            <p id="drop-text">ここに画像をドラッグ</p>
-          </div>
+<div class="photo" id="drop-area">
+  <input type="file" id="photoInput" accept="image/*" style="display:none;" />
+  <img id="photoPreview"
+       src="<c:choose>
+              <c:when test='${not empty account.photoBase64}'>
+                ${account.photoBase64}
+              </c:when>
+              <c:otherwise>
+                ${ctx}/images/placeholder.png
+              </c:otherwise>
+            </c:choose>"
+       alt="プロフィール写真" />
+  <p id="drop-text"
+     <c:if test='${not empty account.photoBase64}'>style="display:none;"</c:if>>
+    ここに画像をドラッグ
+  </p>
+</div>
           <!-- 基本情報（右側） -->
           <div class="profile-info">
             <p class="right-align"><strong>氏名：</strong>

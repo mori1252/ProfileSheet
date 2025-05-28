@@ -14,7 +14,7 @@ import model.Login;
 
 public class AccountsDAO {
 
-    private final String JDBC_URL = "jdbc:h2:file:C:/Users/1Java23/Desktop/work/ProfileSheet/database/Users";
+    private final String JDBC_URL = "jdbc:h2:file:C:/Users/1Java23/Desktop/work/profile/database";
     private final String DB_USER  = "sa";
     private final String DB_PASS  = "";
 
@@ -27,7 +27,7 @@ public class AccountsDAO {
         }
     }
 
-    // ★共通コネクション取得メソッド
+    // 共通コネクション取得メソッド
     private Connection getConnection() throws SQLException {
         loadDriver();
         return DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
@@ -38,7 +38,7 @@ public class AccountsDAO {
         return new Account(
             rs.getInt("ID"),
             rs.getString("NAME"),
-            rs.getString("PASS"),
+//            rs.getString("PASS"),
             rs.getString("BIRTH"),
             rs.getString("ADDRESS"),
             rs.getString("CONTACT"),
@@ -57,58 +57,17 @@ public class AccountsDAO {
     // 新規登録
     public void save(Account account) {
         String sql = "INSERT INTO USERS "
-                   + "(ID, NAME, PASS, BIRTH, ADDRESS, CONTACT,"
+                   + "(ID, NAME, BIRTH, ADDRESS, CONTACT,"
                    + " EDUCATION, WORK_HISTORY, TARGETJOB,"
                    + " CERTIFICATIONS, SELF_PR, HOBBIES,"
                    + " DISABILITY, MEDICAL, PHOTO) "
-                   + "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                   + "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setInt(1, account.getId());
             ps.setString(2, account.getName());
-            ps.setString(3, account.getPass());
 
-            // ← 空文字または null のときは DATE カラムに null を入れる
-            if (account.getBirth() == null || account.getBirth().isEmpty()) {
-                ps.setNull(4, Types.DATE);
-            } else {
-                ps.setDate(4, java.sql.Date.valueOf(account.getBirth()));
-            }
-
-            ps.setString(5, account.getAddress());
-            ps.setString(6, account.getContact());
-            ps.setString(7, account.getEducation());
-            ps.setString(8, account.getWorkHistory());
-            ps.setString(9, account.getTargetJob());
-            ps.setString(10, account.getCertifications());
-            ps.setString(11, account.getSelfPR());
-            ps.setString(12, account.getHobbies());
-            ps.setString(13, account.getDisability());
-            ps.setString(14, account.getMedical());
-            ps.setString(15, account.getPhotoBase64());
-
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    // 更新
-    public void update(Account account) {
-        String sql = "UPDATE USERS SET "
-                   + "NAME=?, PASS=?, BIRTH=?, ADDRESS=?, CONTACT=?,"
-                   + " EDUCATION=?, WORK_HISTORY=?, TARGETJOB=?,"
-                   + " CERTIFICATIONS=?, SELF_PR=?, HOBBIES=?,"
-                   + " DISABILITY=?, MEDICAL=?, PHOTO=? "
-                   + "WHERE ID=?";
-        try (Connection conn = getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ps.setString(1, account.getName());
-            ps.setString(2, account.getPass());
-
-            // ← 空文字または null のときは DATE カラムに null を入れる
             if (account.getBirth() == null || account.getBirth().isEmpty()) {
                 ps.setNull(3, Types.DATE);
             } else {
@@ -126,7 +85,44 @@ public class AccountsDAO {
             ps.setString(12, account.getDisability());
             ps.setString(13, account.getMedical());
             ps.setString(14, account.getPhotoBase64());
-            ps.setInt(15, account.getId());
+
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // 更新
+    public void update(Account account) {
+        String sql = "UPDATE USERS SET "
+                   + "NAME=?, BIRTH=?, ADDRESS=?, CONTACT=?,"
+                   + " EDUCATION=?, WORK_HISTORY=?, TARGETJOB=?,"
+                   + " CERTIFICATIONS=?, SELF_PR=?, HOBBIES=?,"
+                   + " DISABILITY=?, MEDICAL=?, PHOTO=? "
+                   + "WHERE ID=?";
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, account.getName());
+
+            if (account.getBirth() == null || account.getBirth().isEmpty()) {
+                ps.setNull(2, Types.DATE);
+            } else {
+                ps.setDate(2, java.sql.Date.valueOf(account.getBirth()));
+            }
+
+            ps.setString(3, account.getAddress());
+            ps.setString(4, account.getContact());
+            ps.setString(5, account.getEducation());
+            ps.setString(6, account.getWorkHistory());
+            ps.setString(7, account.getTargetJob());
+            ps.setString(8, account.getCertifications());
+            ps.setString(9, account.getSelfPR());
+            ps.setString(10, account.getHobbies());
+            ps.setString(11, account.getDisability());
+            ps.setString(12, account.getMedical());
+            ps.setString(13, account.getPhotoBase64());
+            ps.setInt(14, account.getId());
 
             ps.executeUpdate();
         } catch (SQLException e) {

@@ -32,6 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
       dropArea.classList.add('filled');
       // ● Base64文字列を隠しフィールドに格納
       base64Fld.value = reader.result;
+	  dropText.style.display = 'none';
     };
     reader.readAsDataURL(file);
   });
@@ -46,6 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
       preview.src = reader.result;
       dropArea.classList.add('filled');
       base64Fld.value = reader.result;
+	  dropText.style.display = 'none'; // 案内テキストを非表示
     };
     reader.readAsDataURL(file);
   });

@@ -48,7 +48,7 @@ public class RegisterServlet extends HttpServlet {
         // Account オブジェクトにセット（IDはDAO側で自動採番）
         Account account = new Account();
         account.setName(name);
-        account.setPass("");            // パスワード不要なら空文字
+//        account.setPass("");            // パスワード不要なら空文字
         account.setBirth(birth);
         account.setAddress(address);
         account.setContact(contact);
