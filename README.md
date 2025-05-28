@@ -41,7 +41,7 @@ ProfileSheet
 # Usage
 
 1. Tomcatサーバーを起動
-2. ブラウザで `http://localhost:8080/profile/` にアクセス
+2. ブラウザで `http://localhost:8080/ProfileSheet/` にアクセス
 3. ログイン後(ID=999,パスワード=adminPass)、利用者一覧やプロフィール編集などの機能を利用
 
 # Note
@@ -57,7 +57,7 @@ ProfileSheet
 * 作成者: mori1252
 
 # License
-- profile is under [MIT license](https://opensource.org/licenses/MIT).
+- ProfileSheet is under [MIT license](https://opensource.org/licenses/MIT).
 
 - 「社外秘」
 
