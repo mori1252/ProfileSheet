@@ -48,7 +48,6 @@ public class RegisterServlet extends HttpServlet {
         // Account オブジェクトにセット（IDはDAO側で自動採番）
         Account account = new Account();
         account.setName(name);
-//        account.setPass("");            // パスワード不要なら空文字
         account.setBirth(birth);
         account.setAddress(address);
         account.setContact(contact);
@@ -62,13 +61,28 @@ public class RegisterServlet extends HttpServlet {
         account.setMedical(medical);
         account.setPhotoBase64(photoBase64);
 
-        // 登録／更新
-        dao.save(account);
-        // 登録処理後
-        request.setAttribute("registerSuccess", true);
-        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/jsp/register.jsp");
-        rd.forward(request, response);
-        // 登録完了後、一覧画面へリダイレクト
-        response.sendRedirect(request.getContextPath() + "/LoginServlet");
+        try {
+            // 登録／更新
+            dao.save(account);
+            // 登録処理後
+            request.setAttribute("registerSuccess", true);
+            RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/jsp/register.jsp");
+            rd.forward(request, response);
+            // ※この下のリダイレクトはforward後なので実行されません
+            // response.sendRedirect(request.getContextPath() + "/LoginServlet");
+        } catch (Exception e) {
+            e.printStackTrace(); // ここでエラー詳細がTomcatログに出ます
+            // 必要に応じてエラー画面へ遷移
+            request.setAttribute("errorMessage", "登録処理でエラーが発生しました。");
+            request.getRequestDispatcher("/WEB-INF/jsp/register.jsp").forward(request, response);
+        }
+//        // 登録／更新
+//        dao.save(account);
+//        // 登録処理後
+//        request.setAttribute("registerSuccess", true);
+//        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/jsp/register.jsp");
+//        rd.forward(request, response);
+//        // 登録完了後、一覧画面へリダイレクト
+//        response.sendRedirect(request.getContextPath() + "/LoginServlet");
     }
 }

@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +39,6 @@ public class AccountsDAO {
         return new Account(
             rs.getInt("ID"),
             rs.getString("NAME"),
-//            rs.getString("PASS"),
             rs.getString("BIRTH"),
             rs.getString("ADDRESS"),
             rs.getString("CONTACT"),
@@ -57,36 +57,40 @@ public class AccountsDAO {
     // 新規登録
     public void save(Account account) {
         String sql = "INSERT INTO USERS "
-                   + "(ID, NAME, BIRTH, ADDRESS, CONTACT,"
+                   + "(NAME, BIRTH, ADDRESS, CONTACT,"
                    + " EDUCATION, WORK_HISTORY, TARGETJOB,"
                    + " CERTIFICATIONS, SELF_PR, HOBBIES,"
                    + " DISABILITY, MEDICAL, PHOTO) "
-                   + "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                   + "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
         try (Connection conn = getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            ps.setInt(1, account.getId());
-            ps.setString(2, account.getName());
+            ps.setString(1, account.getName());
 
             if (account.getBirth() == null || account.getBirth().isEmpty()) {
-                ps.setNull(3, Types.DATE);
+                ps.setNull(2, Types.DATE);
             } else {
-                ps.setDate(3, java.sql.Date.valueOf(account.getBirth()));
+                ps.setDate(2, java.sql.Date.valueOf(account.getBirth()));
             }
 
-            ps.setString(4, account.getAddress());
-            ps.setString(5, account.getContact());
-            ps.setString(6, account.getEducation());
-            ps.setString(7, account.getWorkHistory());
-            ps.setString(8, account.getTargetJob());
-            ps.setString(9, account.getCertifications());
-            ps.setString(10, account.getSelfPR());
-            ps.setString(11, account.getHobbies());
-            ps.setString(12, account.getDisability());
-            ps.setString(13, account.getMedical());
-            ps.setString(14, account.getPhotoBase64());
+            ps.setString(3, account.getAddress());
+            ps.setString(4, account.getContact());
+            ps.setString(5, account.getEducation());
+            ps.setString(6, account.getWorkHistory());
+            ps.setString(7, account.getTargetJob());
+            ps.setString(8, account.getCertifications());
+            ps.setString(9, account.getSelfPR());
+            ps.setString(10, account.getHobbies());
+            ps.setString(11, account.getDisability());
+            ps.setString(12, account.getMedical());
+            ps.setString(13, account.getPhotoBase64());
 
             ps.executeUpdate();
+            try (ResultSet rs = ps.getGeneratedKeys()) {
+            	if (rs.next()) {
+            		account.setId(rs.getInt(1));
+            	}
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

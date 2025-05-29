@@ -4,6 +4,21 @@ document.addEventListener('DOMContentLoaded', () => {
   const preview  = document.getElementById('photoPreview');
   const dropText = document.getElementById('drop-text');
   const base64Fld= document.getElementById('photoBase64');
+  // 画像が初期表示されている場合はfilledクラスを付与
+  if (
+    preview &&
+    preview.src &&
+    (
+      preview.src.startsWith('data:image') || // Base64画像
+      (preview.src && !preview.src.includes('placeholder.png')) // placeholder以外のURL画像
+    )
+  ) {
+    dropArea.classList.add('filled');
+    if (dropText) dropText.style.display = 'none';
+  }
+//  if (preview && preview.src && !preview.src.includes('placeholder.png')) {
+//    dropArea.classList.add('filled');
+//  }
 
   // ブラウザのデフォルト挙動をキャンセル
   ['dragenter','dragover','dragleave','drop'].forEach(evt =>

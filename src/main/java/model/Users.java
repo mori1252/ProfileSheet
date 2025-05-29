@@ -3,7 +3,6 @@ package model;
 public class Users {
 	private int id;
 	private String name;
-//	private String pass;
 	private int birth;
 	private String address;
 	private String contact;
@@ -14,7 +13,6 @@ public class Users {
 	public Users() {}
 	public Users(int id, String name, int birth, String address, String contact, String medical, String skill, String targetJob) {
 		this.id = id;
-//		this.pass = pass;
 		this.birth = birth;
 		this.address = address;
 		this.contact = contact;
@@ -27,8 +25,6 @@ public class Users {
 	public void setId(int id) { this.id = id;}
 	public String getName() {return name;}
 	public void setName(String name) {this.name = name;}
-//	public String getPass() {return pass;}
-//	public void setPass(String pass) {this.pass = pass;}
 	public int getBirth() {return birth;}
 	public void setBirth(int birth) {this.birth = birth;}
 	public String getAddress() {return address;}

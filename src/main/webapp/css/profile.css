@@ -71,8 +71,8 @@ body, html {
 .filled #drop-text {
   display: none;
 }
-.filled.photo {
-  border: none;
+.photo.filled {
+  border: none !important;
 }
 
 .profile-info { flex-grow: 1; }
